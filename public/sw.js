@@ -3,8 +3,11 @@ var CACHE_NAME = 'service-workers-dev';
 var urlsToCache = [
     '/',
     '/index.html',
-    '/css/styles.css',
-    '/js/main.js'
+    '/dist/css/styles.css',
+    '/dist/css/bootstrap.css',
+    '/dist/js/jquery.js',
+    '/dist/js/bootstrap.js',
+    '/dist/js/main.js'
 ];
 
 self.addEventListener('install', function(event) {
