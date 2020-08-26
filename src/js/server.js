@@ -12,19 +12,19 @@ const server = http.createServer(app);
 // web sockets server
 const wss = new WebSocket.Server({ server });
 
+const statuses = {
+    
+};
+
 wss.on('connection', (client) => {
     console.log('connected');
-    console.log('client Set length: ', wss.clients.size);
 
     client.on('message', (message) => {
-        client.send(`You sent ${message}`);
+        client.send(`you sent ${message}`);
     });
-
-    client.send('hello from the server!');
 
     client.on('close', (client) => {
         console.log('closed');
-        console.log('Number of clients: ', wss.clients.size);
     });
 });
 

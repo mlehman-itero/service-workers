@@ -10,22 +10,22 @@ if (typeof SW === 'undefined' || SW === null)
     this.SW = {
         init: function () {
             this.configureWebSocketClient();
-            this.wireSendEvent();
+            this.sendMessage();
         },
 
         configureWebSocketClient: function () {
             ws.onopen = function () {
-                ws.send('Hello from the client');
+                ws.send('hello from the client');
             };
 
-            ws.onmessage = function (data) {
-                console.log(data);
+            ws.onmessage = function (message) {
+                console.log(message.data);
             };
         },
 
-        wireSendEvent: function () {
-            $('#send-message-btn').click(function () {
-                ws.send('hello world');
+        sendMessage: function(msg) {
+            $('#send-message-btn').on('click', function(event) {
+                ws.send('button click');
             });
         }
     }
