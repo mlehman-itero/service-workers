@@ -4,13 +4,13 @@
 if (typeof SW === 'undefined' || SW === null)
     var SW = {};
 
-(function SW(namespace, $) {
+(function PageController(namespace, $) {
     var ws = new WebSocket('ws://localhost:8080');
 
-    this.SW = {
+    this.PageController = {
         init: function () {
             this.configureWebSocketClient();
-            this.sendMessage();
+            this.formHandler();
         },
 
         configureWebSocketClient: function () {
@@ -23,12 +23,28 @@ if (typeof SW === 'undefined' || SW === null)
             };
         },
 
-        sendMessage: function(msg) {
-            $('#send-message-btn').on('click', function(event) {
-                ws.send('button click');
+        formHandler: function () {
+            $('.loader').hide();
+
+            $('#searchForm').submit(function (event) {
+                event.preventDefault();
+                var term = $('#movieSearch').val();
+                SW.PageController.searchMovies(term);
             });
+        },
+
+        searchMovies: function (term) {
+            $('.loader').show();
+
+            $.get(`http://www.omdbapi.com/?apikey=a57c2e77&s=${term}`)
+                .done(function (data) {
+                    $('.loader').hide();
+                    console.log(data);
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    console.log(errorThrown);
+                });
         }
     }
 
-    namespace.SW = this.SW;
+    namespace.PageController = this.PageController;
 })(SW, jQuery);
