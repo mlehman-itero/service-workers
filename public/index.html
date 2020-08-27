@@ -14,12 +14,17 @@
     <div class="container-fluid text-center">    
         <div class="row content">
             <div class="col-sm-12 text-left"> 
-                <h1>Welcome</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                <hr>
-                <h3>Test</h3>
-                <p>Lorem ipsum...</p>
-                <button id="send-message-btn">Send Message</button>
+                <form id="searchForm">
+                    <div class="form-group">
+                      <label for="movieSearch">Search movies</label>
+                      <input type="text" class="form-control" id="movieSearch" placeholder="Enter search term">                      
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+                  <div class="loader"></div>
+                  <div id="results">
+
+                  </div>
             </div>
         </div>
     </div>
@@ -37,10 +42,8 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('sw.js').then(function(registration) {
-                    // registration successful
                     console.log('ServiceWorker registration successful with scope: ', registration.scope);
                 }, function(err) {
-                    // registration failed
                     console.log('ServiceWorker registration failed: ', err);
                 });
             });
@@ -49,7 +52,7 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            SW.init();
+            SW.PageController.init();
         });
     </script>
 </body>

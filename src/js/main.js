@@ -4,31 +4,57 @@
 if (typeof SW === 'undefined' || SW === null)
     var SW = {};
 
-(function SW(namespace, $) {
+(function PageController(namespace, $) {
     var ws = new WebSocket('ws://localhost:8080');
 
-    this.SW = {
+    this.PageController = {
         init: function () {
-            this.configureWebSocketClient();
-            this.sendMessage();
+            this.formHandler();
         },
 
-        configureWebSocketClient: function () {
-            ws.onopen = function () {
-                ws.send('hello from the client');
-            };
+        formHandler: function () {
+            $('.loader').hide();
 
-            ws.onmessage = function (message) {
-                console.log(message.data);
-            };
-        },
-
-        sendMessage: function(msg) {
-            $('#send-message-btn').on('click', function(event) {
-                ws.send('button click');
+            $('#searchForm').submit(function (event) {
+                event.preventDefault();
+                var term = $('#movieSearch').val();
+                SW.PageController.searchMovies(term);
             });
+        },
+
+        searchMovies: function (term) {
+            $('.loader').show();
+
+            fetch(`http://www.omdbapi.com/?apikey=a57c2e77&s=${term}`)
+                .then(response => {
+                    if (response.status !== 200) {
+                        console.log(`Error status: ${response.status}`);
+                        return;
+                    }
+
+                    response.json()
+                        .then(data => {
+                            $('.loader').hide();
+                            var results = data.Search;
+
+                            var html = '';
+
+                            $.each(results, function (i, item) {
+                                html += `<div class="row">
+                                    <div class="col-sm-12">
+                                        ${item.Title} (${item.Year})
+                                    </div>
+                                    </div>`;
+                            });
+
+                            $('#results').html(html);        
+                        });
+                }).catch(err => {
+                    $('.loader').hide();
+                    console.log(err);
+                });
         }
     }
 
-    namespace.SW = this.SW;
+    namespace.PageController = this.PageController;
 })(SW, jQuery);

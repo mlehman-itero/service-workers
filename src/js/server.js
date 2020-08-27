@@ -12,10 +12,6 @@ const server = http.createServer(app);
 // web sockets server
 const wss = new WebSocket.Server({ server });
 
-const statuses = {
-    
-};
-
 wss.on('connection', (client) => {
     console.log('connected');
 
