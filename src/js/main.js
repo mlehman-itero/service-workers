@@ -9,18 +9,7 @@ if (typeof SW === 'undefined' || SW === null)
 
     this.PageController = {
         init: function () {
-            this.configureWebSocketClient();
             this.formHandler();
-        },
-
-        configureWebSocketClient: function () {
-            ws.onopen = function () {
-                ws.send('hello from the client');
-            };
-
-            ws.onmessage = function (message) {
-                console.log(message.data);
-            };
         },
 
         formHandler: function () {
@@ -36,12 +25,33 @@ if (typeof SW === 'undefined' || SW === null)
         searchMovies: function (term) {
             $('.loader').show();
 
-            $.get(`http://www.omdbapi.com/?apikey=a57c2e77&s=${term}`)
-                .done(function (data) {
+            fetch(`http://www.omdbapi.com/?apikey=a57c2e77&s=${term}`)
+                .then(response => {
+                    if (response.status !== 200) {
+                        console.log(`Error status: ${response.status}`);
+                        return;
+                    }
+
+                    response.json()
+                        .then(data => {
+                            $('.loader').hide();
+                            var results = data.Search;
+
+                            var html = '';
+
+                            $.each(results, function (i, item) {
+                                html += `<div class="row">
+                                    <div class="col-sm-12">
+                                        ${item.Title} (${item.Year})
+                                    </div>
+                                    </div>`;
+                            });
+
+                            $('#results').html(html);        
+                        });
+                }).catch(err => {
                     $('.loader').hide();
-                    console.log(data);
-                }).fail(function (jqXHR, textStatus, errorThrown) {
-                    console.log(errorThrown);
+                    console.log(err);
                 });
         }
     }

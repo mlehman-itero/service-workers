@@ -22,7 +22,7 @@
                     <button type="submit" class="btn btn-primary">Submit</button>
                   </form>
                   <div class="loader"></div>
-                  <div class="results">
+                  <div id="results">
 
                   </div>
             </div>
@@ -42,10 +42,8 @@
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('sw.js').then(function(registration) {
-                    // registration successful
                     console.log('ServiceWorker registration successful with scope: ', registration.scope);
                 }, function(err) {
-                    // registration failed
                     console.log('ServiceWorker registration failed: ', err);
                 });
             });
